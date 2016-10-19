@@ -19,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
             "火锅", "生日蛋糕", "甜品饮品", "水上乐园", "汽车服务", "美发", "丽人", "景点", "足疗按摩", "运动健身", "健身", "超市", "买菜",
             "今日新单", "小吃快餐", "面膜", "洗浴/汗蒸", "母婴亲子", "生活服务", "婚纱摄影", "学习培训", "家装", "结婚", "全部分配"};
 
+    List<String> mData;
+    List<Integer> mImgRes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +29,15 @@ public class MainActivity extends AppCompatActivity {
         GridViewPager mGridViewPager = (GridViewPager) findViewById(R.id.mGridViewPager);
         //初始化数据源
         mGridViewPager
+                //设置每一页的容量
+                .setPageSize(9)
                 .setImageSetListener(new ImageSetListener() {
                     @Override
                     public void setImage(ImageView iv, int pos) {
+                        //图片加载方式任选
                         iv.setBackgroundResource(mImgRes.get(pos));
                     }
                 })
-                .setData(initData())
                 .setGridItemClickListener(new GridItemClickListener() {
                     @Override
                     public void click(int pos, int position, String str) {
@@ -44,11 +49,24 @@ public class MainActivity extends AppCompatActivity {
                     public void click(int pos, int position, String str) {
                         Log.d("456", pos + "/" + str);
                     }
-                });
+                })
+                //传入String的List 必须作为最后一步
+                .init(initData());
+        //再次更改仍有效
+//        mGridViewPager.setImageSetListener(new ImageSetListener() {
+//            @Override
+//            public void setImage(ImageView iv, int pos) {
+//                iv.setBackgroundResource(mImgRes.get(0));
+//            }
+//        });
+        //再次更改仍有效
+//        mGridViewPager.setGridItemClickListener(new GridItemClickListener() {
+//            @Override
+//            public void click(int pos, int position, String str) {
+//                Log.d("GridItemClick", pos + "/" + str);
+//            }
+//        });
     }
-
-    List<String> mData;
-    List<Integer> mImgRes;
 
     /**
      * 初始化数据源

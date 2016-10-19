@@ -16,7 +16,6 @@ import java.util.List;
 public class GridViewAdapter extends BaseAdapter {
     private List<String> mData;
     private LayoutInflater inflater;
-
     private ImageSetListener listener;
     /**
      * 页数下标,从0开始(当前是第几页)
@@ -32,6 +31,10 @@ public class GridViewAdapter extends BaseAdapter {
         this.mData = mData;
         this.curIndex = curIndex;
         this.pageSize = pageSize;
+        this.listener = listener;
+    }
+
+    public void setListener(ImageSetListener listener) {
         this.listener = listener;
     }
 
