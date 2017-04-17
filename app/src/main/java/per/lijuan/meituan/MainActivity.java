@@ -3,12 +3,11 @@ package per.lijuan.meituan;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.kerchin.widget.GridItemClickListener;
 import com.kerchin.widget.GridItemLongClickListener;
 import com.kerchin.widget.GridViewPager;
-import com.kerchin.widget.ImageSetListener;
+import com.kerchin.widget.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +18,6 @@ public class MainActivity extends AppCompatActivity {
             "火锅", "生日蛋糕", "甜品饮品", "水上乐园", "汽车服务", "美发", "丽人", "景点", "足疗按摩", "运动健身", "健身", "超市", "买菜",
             "今日新单", "小吃快餐", "面膜", "洗浴/汗蒸", "母婴亲子", "生活服务", "婚纱摄影", "学习培训", "家装", "结婚", "全部分配"};
 
-    List<String> mData;
-    List<Integer> mImgRes;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,14 +26,7 @@ public class MainActivity extends AppCompatActivity {
         //初始化数据源
         mGridViewPager
                 //设置每一页的容量
-                .setPageSize(9)
-                .setImageSetListener(new ImageSetListener() {
-                    @Override
-                    public void setImage(ImageView iv, int pos) {
-                        //图片加载方式任选
-                        iv.setBackgroundResource(mImgRes.get(pos));
-                    }
-                })
+                .setPageSize(10)
                 .setGridItemClickListener(new GridItemClickListener() {
                     @Override
                     public void click(int pos, int position, String str) {
@@ -71,14 +60,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 初始化数据源
      */
-    private List<String> initData() {
-        mData = new ArrayList<String>();
-        mImgRes = new ArrayList<Integer>();
+    private List<Model> initData() {
+        List<Model> mData = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
             //动态获取资源ID，第一个参数是资源名，第二个参数是资源类型例如drawable，string等，第三个参数包名
             int imageId = getResources().getIdentifier("ic_category_" + i, "mipmap", getPackageName());
-            mData.add(titles[i]);
-            mImgRes.add(imageId);
+            mData.add(new Model(titles[i], imageId));
         }
         return mData;
     }

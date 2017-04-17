@@ -23,12 +23,11 @@ public class GridViewPager extends RelativeLayout {
     private Context mContext;
     private ViewPager mPager;
     private LinearLayout mLlDot;
-    private List<String> mData;
+    private List<Model> mData;
 
     private List<GridView> mPagerList;
     private GridItemClickListener gridItemClickListener;
     private GridItemLongClickListener gridItemLongClickListener;
-    private ImageSetListener imageSetListener;
 
     /**
      * 总的页数 计算得出
@@ -76,7 +75,7 @@ public class GridViewPager extends RelativeLayout {
      * @param list
      * @return
      */
-    public GridViewPager init(List<String> list) {
+    public GridViewPager init(List<Model> list) {
         mData = list;
         //总的页数=总数/每页数量，并取整
         pageCount = (int) Math.ceil(mData.size() * 1.0 / pageSize);
@@ -85,7 +84,7 @@ public class GridViewPager extends RelativeLayout {
         for (int i = 0; i < pageCount; i++) {
             //每个页面都是inflate出一个新实例
             GridView gridView = (GridView) inflater.inflate(R.layout.gridview, mPager, false);
-            gridView.setAdapter(new GridViewAdapter(mContext, mData, i, pageSize, imageSetListener));
+            gridView.setAdapter(new GridViewAdapter(mContext, mData, i, pageSize));
             mPagerList.add(gridView);
 
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -93,7 +92,7 @@ public class GridViewPager extends RelativeLayout {
                 public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                     if (gridItemClickListener == null) return;
                     int position = pos + curIndex * pageSize;
-                    gridItemClickListener.click(pos, position, mData.get(position));
+                    gridItemClickListener.click(pos, position, mData.get(position).getName());
                 }
             });
             //true if the callback consumed the long click, false otherwise
@@ -103,7 +102,7 @@ public class GridViewPager extends RelativeLayout {
                     if (gridItemLongClickListener == null) return false;
                     else {
                         int position = pos + curIndex * pageSize;
-                        gridItemLongClickListener.click(pos, position, mData.get(position));
+                        gridItemLongClickListener.click(pos, position, mData.get(position).getName());
                         return true;
                     }
                 }
@@ -176,23 +175,6 @@ public class GridViewPager extends RelativeLayout {
      */
     public GridViewPager setGridItemLongClickListener(GridItemLongClickListener listener) {
         gridItemLongClickListener = listener;
-        return this;
-    }
-
-    /**
-     * optional 设置图片加载逻辑
-     *
-     * @param listener
-     * @return
-     */
-    public GridViewPager setImageSetListener(ImageSetListener listener) {
-        this.imageSetListener = listener;
-        if (mPagerList != null) {
-            for (GridView gv : mPagerList) {
-                GridViewAdapter adapter = (GridViewAdapter) gv.getAdapter();
-                adapter.setListener(listener);
-            }
-        }
         return this;
     }
 

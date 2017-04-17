@@ -14,9 +14,8 @@ import java.util.List;
  * Created by lijuan on 2016/9/12.
  */
 public class GridViewAdapter extends BaseAdapter {
-    private List<String> mData;
+    private List<Model> mData;
     private LayoutInflater inflater;
-    private ImageSetListener listener;
     /**
      * 页数下标,从0开始(当前是第几页)
      */
@@ -26,16 +25,11 @@ public class GridViewAdapter extends BaseAdapter {
      */
     private int pageSize;
 
-    public GridViewAdapter(Context context, List<String> mData, int curIndex, int pageSize, ImageSetListener listener) {
+    public GridViewAdapter(Context context, List<Model> mData, int curIndex, int pageSize) {
         inflater = LayoutInflater.from(context);
         this.mData = mData;
         this.curIndex = curIndex;
         this.pageSize = pageSize;
-        this.listener = listener;
-    }
-
-    public void setListener(ImageSetListener listener) {
-        this.listener = listener;
     }
 
     /**
@@ -50,7 +44,7 @@ public class GridViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public Model getItem(int position) {
         return mData.get(position + curIndex * pageSize);
     }
 
@@ -75,8 +69,8 @@ public class GridViewAdapter extends BaseAdapter {
          * 在给View绑定显示的数据时，计算正确的position = position + curIndex * pageSize，
          */
         int pos = position + curIndex * pageSize;
-        viewHolder.tv.setText(mData.get(pos));
-        if (listener != null) listener.setImage(viewHolder.iv, pos);
+        viewHolder.tv.setText(mData.get(pos).getName());
+        viewHolder.iv.setImageResource(mData.get(pos).getIconRes());
         return convertView;
     }
 
